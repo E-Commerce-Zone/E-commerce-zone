@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { createContext } from "vm";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  UserCredential,
+} from "firebase/auth";
+import React, { useState, createContext } from "react";
+import auth from "../Config/Firebase.init";
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -21,15 +27,32 @@ type User = {
   email: string;
 };
 
-type AuthInfo = {
-  user: User | null;
-};
-export const AuthContext = createContext();
+export const AuthContext = createContext({} as AuthInfo);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<null | User>(null);
+  const CreateUser = (email: string, password: string) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
-  const authInfo: AuthInfo = { user };
+  const SignIn = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const UpdateUserProfile = (profile: {
+    displayName: string;
+    photoURL: string;
+  }) => {
+    return updateProfile(auth.currentUser!, profile);
+  };
+
+  const authInfo: AuthInfo = {
+    user,
+    setUser,
+    CreateUser,
+    SignIn,
+    UpdateUserProfile,
+  };
 
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
