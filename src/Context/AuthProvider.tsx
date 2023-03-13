@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-import { createContext } from "vm";
+import React, { useState, createContext } from "react";
 
 type AuthProviderProps = {
-   children: React.ReactNode;
+  children: React.ReactNode;
 };
 type User = {
-   uid: string;
-   email: string;
+  uid: string;
+  email: string;
 };
 
-type AuthInfo  = {
-   user: User | null; 
-}
-export const AuthContext = createContext();
+type AuthInfo = {
+  user: User | null;
+};
+export const AuthContext = createContext({});
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-   const [user, setUser] = useState<null | User>(null);
+  const [user, setUser] = useState<null | User>(null);
 
-   const authInfo :AuthInfo= {user};
+  const authInfo: AuthInfo = { user };
 
-   return (
-      <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
-   );
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;
